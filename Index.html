@@ -1,2 +1,916 @@
-# Freelancing-Portfolio-
-A modern portfolio website showcasing the work of Rajdeep Roy — Video Editor, Motion Designer, and Graphic Designer. Featuring motion graphics projects, video editing showcases, service packages, client testimonials, and direct contact options for freelance collaborations.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rajdeep — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0a0005;--bg2:#120008;--card:#1a000d;
+  --red:#c0133a;--red2:#e01a46;--glow:#ff2255;
+  --dim:rgba(255,100,130,0.5);--border:rgba(192,19,58,0.2);
+  --white:#fff;--gray:rgba(255,255,255,0.6);
+}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(ellipse 80% 40% at 0% 0%,rgba(120,0,30,0.18) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 100% 30%,rgba(180,10,40,0.13) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 100%,rgba(90,0,20,0.15) 0%,transparent 65%),
+    linear-gradient(160deg,#0e0008 0%,#0a0005 40%,#110008 70%,#0d0006 100%);
+  background-attachment:fixed;
+  color:var(--white);font-family:'Space Grotesk',sans-serif;overflow-x:hidden;
+}
+::-webkit-scrollbar{width:3px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--red);border-radius:2px;}
+
+/* ── ANIME STICKERS (2D flat, exact like images) ── */
+.sticker-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:40;overflow:hidden;}
+.sticker{
+  position:absolute;
+  image-rendering:pixelated;
+  animation:stickerBob 4s ease-in-out infinite;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5));
+}
+.sticker svg{display:block;}
+.s1{top:12%;left:1.5%;animation-delay:0s;width:72px;}
+.s2{top:35%;left:1%;animation-delay:1.3s;width:68px;}
+.s3{top:58%;left:1.5%;animation-delay:2.6s;width:70px;}
+.s4{top:15%;right:1.5%;animation-delay:0.7s;width:70px;}
+.s5{top:42%;right:1%;animation-delay:2s;width:68px;}
+.s6{top:68%;right:1.5%;animation-delay:1s;width:72px;}
+@keyframes stickerBob{
+  0%,100%{transform:translateY(0px);}
+  50%{transform:translateY(-8px);}
+}
+
+/* ── ORDER MODAL ── */
+.modal-bg{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1rem;}
+.modal-bg.open{display:flex;}
+.modal{background:linear-gradient(160deg,#200010,#110007);border:1px solid var(--border);border-radius:20px;padding:2rem;width:100%;max-width:480px;box-shadow:0 30px 80px rgba(192,19,58,0.3);position:relative;max-height:90vh;overflow-y:auto;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--gray);font-size:1.4rem;cursor:pointer;transition:color 0.2s;line-height:1;}
+.modal-close:hover{color:#fff;}
+.modal-plan-badge{display:inline-block;padding:0.22rem 0.8rem;background:var(--red);border-radius:100px;font-size:0.6rem;letter-spacing:0.15em;font-weight:700;margin-bottom:0.8rem;}
+.modal h3{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:0.3rem;}
+.modal-sub{font-size:0.78rem;color:var(--gray);margin-bottom:1.4rem;line-height:1.6;}
+.fg{margin-bottom:0.9rem;}
+.fg label{display:block;font-size:0.68rem;color:var(--dim);letter-spacing:0.08em;margin-bottom:0.3rem;text-transform:uppercase;}
+.fg input,.fg textarea,.fg select{width:100%;padding:0.72rem 1rem;background:rgba(192,19,58,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-family:inherit;font-size:0.82rem;outline:none;transition:border-color 0.3s;resize:none;-webkit-appearance:none;}
+.fg select option{background:#1a000d;color:#fff;}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(255,255,255,0.2);}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);}
+.fg textarea{height:75px;}
+.modal-submit{width:100%;padding:0.85rem;background:var(--red);color:#fff;border:none;border-radius:100px;font-family:inherit;font-size:0.85rem;font-weight:700;cursor:pointer;transition:all 0.3s;margin-top:0.4rem;box-shadow:0 0 25px rgba(192,19,58,0.4);}
+.modal-submit:hover{background:var(--glow);box-shadow:0 0 45px rgba(255,34,85,0.6);transform:translateY(-2px);}
+.modal-success{text-align:center;padding:2rem 1rem;display:none;}
+.modal-success .tick{font-size:3rem;margin-bottom:1rem;}
+.modal-success h4{font-family:'Syne',sans-serif;font-size:1.2rem;margin-bottom:0.5rem;}
+.modal-success p{font-size:0.8rem;color:var(--gray);line-height:1.7;}
+
+/* ── LOADER ── */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transition:opacity 0.6s ease,visibility 0.6s ease;}
+#loader.hidden{opacity:0;visibility:hidden;}
+.loader-tags{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
+.loader-tag{padding:0.3rem 0.9rem;border:1px solid var(--border);border-radius:100px;font-size:0.65rem;letter-spacing:0.2em;color:var(--dim);}
+.loader-tag.active{border-color:var(--red);color:var(--glow);}
+.loader-orb{width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#ff4470,#a00030 50%,#400010);box-shadow:0 0 60px rgba(255,34,85,0.6),0 0 120px rgba(192,19,58,0.3);animation:orbPulse 1.5s ease-in-out infinite;display:flex;align-items:center;justify-content:center;font-size:0.7rem;letter-spacing:0.2em;color:rgba(255,255,255,0.8);}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 60px rgba(255,34,85,0.6),0 0 120px rgba(192,19,58,0.3);}50%{box-shadow:0 0 90px rgba(255,34,85,0.9),0 0 180px rgba(192,19,58,0.5);}}
+.loader-bar{width:280px;height:2px;background:rgba(192,19,58,0.15);border-radius:2px;overflow:hidden;}
+.loader-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--red),var(--glow));border-radius:2px;transition:width 0.05s linear;}
+.loader-text{font-size:0.65rem;letter-spacing:0.25em;color:var(--dim);}
+
+/* ── NAV ── */
+nav{position:fixed;top:1.2rem;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:0.3rem;background:rgba(15,0,8,0.75);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:100px;padding:0.45rem 0.6rem;}
+.nav-item{display:flex;align-items:center;gap:0.4rem;padding:0.45rem 1.1rem;border-radius:100px;font-size:0.75rem;letter-spacing:0.04em;color:var(--gray);text-decoration:none;cursor:pointer;transition:all 0.3s;border:none;background:none;font-family:inherit;}
+.nav-item:hover,.nav-item.active{background:var(--red);color:#fff;}
+.nav-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.7;}
+
+/* ── SECTIONS ── */
+section{min-height:100vh;padding:7rem 5% 5rem;position:relative;z-index:1;}
+
+/* ── HERO ── */
+#home{display:flex;align-items:center;justify-content:space-between;gap:3rem;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.35rem 1rem;border:1px solid var(--border);border-radius:100px;font-size:0.7rem;letter-spacing:0.1em;color:var(--dim);margin-bottom:1.5rem;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--glow);animation:blink 1.5s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.hero-name{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:800;line-height:1.05;margin-bottom:0.5rem;}
+.hero-role{font-family:'Syne',sans-serif;font-size:clamp(1.1rem,2.5vw,1.8rem);font-weight:700;color:var(--red2);margin-bottom:1.2rem;}
+.hero-desc{font-size:0.9rem;color:var(--gray);line-height:1.8;max-width:460px;margin-bottom:0.8rem;}
+.hero-meta{display:flex;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap;}
+.hero-meta span{font-size:0.72rem;color:var(--dim);display:flex;align-items:center;gap:0.4rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2rem;}
+.btn-red{padding:0.75rem 1.8rem;background:var(--red);color:#fff;border-radius:100px;font-size:0.8rem;font-weight:600;text-decoration:none;border:none;cursor:pointer;font-family:inherit;box-shadow:0 0 25px rgba(192,19,58,0.4);transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem;}
+.btn-red:hover{background:var(--glow);box-shadow:0 0 45px rgba(255,34,85,0.6);transform:translateY(-2px) scale(1.03);}
+.btn-outline{padding:0.75rem 1.8rem;border:1px solid var(--border);color:var(--gray);border-radius:100px;font-size:0.8rem;text-decoration:none;transition:all 0.3s;display:inline-flex;align-items:center;gap:0.5rem;background:none;cursor:pointer;font-family:inherit;}
+.btn-outline:hover{border-color:var(--red);color:#fff;}
+.follow-row{display:flex;align-items:center;gap:1rem;}
+.follow-label{font-size:0.7rem;color:var(--dim);}
+.social-icon-btn{width:36px;height:36px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--gray);text-decoration:none;font-size:0.9rem;transition:all 0.3s;}
+.social-icon-btn:hover{border-color:var(--red);color:#fff;background:rgba(192,19,58,0.2);transform:scale(1.15);}
+
+/* ── AVATAR ── */
+.hero-avatar{flex-shrink:0;width:280px;height:320px;background:linear-gradient(135deg,#2a0015,#1a000d);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 0 60px rgba(192,19,58,0.18);animation:avatarFloat 5s ease-in-out infinite;}
+@keyframes avatarFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.hero-avatar::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 40% 20%,rgba(192,19,58,0.15),transparent 60%);}
+.hero-avatar-img{width:92%;height:92%;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 16px rgba(192,19,58,0.3));}
+.avatar-bottom-tag{position:absolute;bottom:12px;left:12px;right:12px;z-index:3;background:rgba(10,0,5,0.88);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:0.6rem 1rem;display:flex;justify-content:space-between;align-items:center;}
+.abt-name{font-family:'Syne',sans-serif;font-size:0.85rem;font-weight:800;}
+.abt-role{font-size:0.58rem;color:var(--dim);letter-spacing:0.08em;}
+.avatar-glow{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:180px;height:60px;background:radial-gradient(ellipse,rgba(255,34,85,0.3),transparent 70%);}
+
+/* ── ABOUT ── */
+#about{background:radial-gradient(ellipse 60% 50% at 30% 50%,rgba(120,0,30,0.12) 0%,transparent 70%);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;max-width:1100px;margin:0 auto;}
+.about-photo{width:100%;aspect-ratio:3/4;max-width:360px;background:linear-gradient(135deg,#2a0015,#120008);border:1px solid var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;box-shadow:0 20px 60px rgba(192,19,58,0.1);}
+.about-photo-img{width:80%;height:80%;object-fit:contain;filter:drop-shadow(0 0 12px rgba(192,19,58,0.2));}
+.about-photo-tag{position:absolute;bottom:1.2rem;left:1.2rem;right:1.2rem;background:rgba(10,0,5,0.85);backdrop-filter:blur(10px);border:1px solid var(--border);border-radius:10px;padding:0.8rem 1rem;display:flex;justify-content:space-between;align-items:center;}
+.about-photo-tag span{font-size:0.7rem;color:var(--dim);}
+.about-photo-tag strong{font-size:0.85rem;color:#fff;}
+.section-eyebrow{font-size:0.65rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--red2);margin-bottom:0.6rem;}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:1rem;}
+.section-title em{font-style:normal;color:var(--red2);}
+.about-desc{font-size:0.88rem;color:var(--gray);line-height:1.9;margin-bottom:1.5rem;}
+.skills-grid{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:2rem;}
+.skill-tag{padding:0.35rem 0.9rem;border:1px solid var(--border);border-radius:100px;font-size:0.68rem;color:var(--dim);letter-spacing:0.05em;transition:all 0.3s;}
+.skill-tag:hover{border-color:var(--red);color:#fff;background:rgba(192,19,58,0.1);}
+.exp-row{display:flex;gap:2rem;flex-wrap:wrap;}
+.exp-item strong{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--red2);display:block;}
+.exp-item span{font-size:0.68rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;}
+
+/* ── WORKS ── */
+#works{background:var(--bg2);}
+.works-header{text-align:center;margin-bottom:4rem;}
+.works-header .section-title{color:var(--red2);}
+.works-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1200px;margin:0 auto;}
+.work-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform 0.4s cubic-bezier(.17,.67,.3,1.3),box-shadow 0.4s;transform-style:preserve-3d;}
+.work-card:hover{transform:translateY(-10px) rotateX(4deg) rotateY(-3deg) scale(1.02);box-shadow:0 25px 60px rgba(192,19,58,0.25),0 0 0 1px rgba(192,19,58,0.3);}
+.work-card:active{transform:scale(1.05) translateY(-5px);box-shadow:0 0 60px rgba(255,34,85,0.5);}
+.work-thumb{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.work-thumb-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(192,19,58,0.1),transparent);transition:opacity 0.3s;}
+.work-card:hover .work-thumb-overlay{opacity:2;}
+.play-icon{width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:1rem;transition:all 0.3s;}
+.work-card:hover .play-icon{border-color:var(--red);color:#fff;background:rgba(192,19,58,0.3);box-shadow:0 0 20px rgba(255,34,85,0.4);}
+.work-info{padding:1.2rem 1.4rem 1.5rem;}
+.work-cat{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--red2);margin-bottom:0.4rem;}
+.work-name{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:0.4rem;}
+.work-desc{font-size:0.73rem;color:var(--gray);line-height:1.6;margin-bottom:0.8rem;}
+.work-tags{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.work-tag{padding:0.2rem 0.6rem;background:rgba(192,19,58,0.1);border:1px solid var(--border);border-radius:100px;font-size:0.6rem;color:var(--dim);}
+.work-link{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.7rem;padding:0.35rem 0.9rem;background:var(--red);border-radius:100px;font-size:0.65rem;color:#fff;text-decoration:none;font-weight:600;transition:all 0.3s;}
+.work-link:hover{background:var(--glow);transform:scale(1.05);}
+
+/* ── SERVICES ── */
+#services{background:var(--bg);}
+.services-header{text-align:center;margin-bottom:4rem;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto 4rem;}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:all 0.4s cubic-bezier(.17,.67,.3,1.3);}
+.service-card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 20px 60px rgba(192,19,58,0.2),0 0 0 1px rgba(192,19,58,0.25);border-color:rgba(192,19,58,0.4);}
+.service-card:active{transform:scale(1.06);box-shadow:0 0 70px rgba(255,34,85,0.45);}
+.service-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 1.2rem;box-shadow:0 0 30px rgba(192,19,58,0.35);transition:box-shadow 0.3s;}
+.service-card:hover .service-icon{box-shadow:0 0 50px rgba(255,34,85,0.6);}
+.service-name{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:0.6rem;}
+.service-desc{font-size:0.78rem;color:var(--gray);line-height:1.7;margin-bottom:1rem;}
+.service-features{display:flex;flex-wrap:wrap;gap:0.4rem;justify-content:center;}
+.sf{padding:0.25rem 0.7rem;background:rgba(192,19,58,0.08);border:1px solid var(--border);border-radius:100px;font-size:0.6rem;color:var(--dim);}
+
+/* ── PRICING ── */
+.pricing-title{text-align:center;margin-bottom:3rem;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1000px;margin:0 auto;}
+.price-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;text-align:center;transition:all 0.4s cubic-bezier(.17,.67,.3,1.3);position:relative;overflow:hidden;}
+.price-card.featured{border-color:var(--red);box-shadow:0 0 40px rgba(192,19,58,0.2);}
+.price-card.featured::before{content:'POPULAR';position:absolute;top:1rem;right:1rem;font-size:0.55rem;letter-spacing:0.2em;background:var(--red);padding:0.2rem 0.6rem;border-radius:100px;}
+.price-card:hover{transform:translateY(-10px) scale(1.03);box-shadow:0 20px 50px rgba(192,19,58,0.25);}
+.price-card:active{transform:scale(1.06);box-shadow:0 0 70px rgba(255,34,85,0.5);}
+.price-tier{font-size:0.65rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--dim);margin-bottom:0.5rem;}
+.price-amount{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;color:var(--red2);margin-bottom:0.3rem;}
+.price-note{font-size:0.65rem;color:var(--dim);margin-bottom:1.5rem;}
+.price-features{list-style:none;text-align:left;margin-bottom:1.5rem;}
+.price-features li{font-size:0.78rem;color:var(--gray);padding:0.4rem 0;border-bottom:1px solid rgba(192,19,58,0.08);display:flex;align-items:center;gap:0.5rem;}
+.price-features li::before{content:'✓';color:var(--red2);font-weight:700;flex-shrink:0;}
+.payment-note{text-align:center;margin-top:2rem;font-size:0.75rem;color:var(--dim);}
+.upi-badge{display:inline-flex;align-items:center;gap:0.5rem;padding:0.5rem 1.2rem;border:1px solid var(--border);border-radius:100px;margin-top:0.5rem;font-size:0.75rem;color:var(--red2);}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--bg2);}
+.test-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1100px;margin:0 auto;}
+.test-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:1.8rem;position:relative;overflow:hidden;transition:all 0.4s cubic-bezier(.17,.67,.3,1.3);}
+.test-card::before{content:'\201C';position:absolute;top:0.5rem;right:1.2rem;font-size:7rem;color:rgba(192,19,58,0.06);font-family:Georgia,serif;line-height:1;}
+.test-card:hover{transform:translateY(-8px) scale(1.02);box-shadow:0 20px 50px rgba(192,19,58,0.2);}
+.test-card:active{transform:scale(1.05);box-shadow:0 0 60px rgba(255,34,85,0.4);}
+.stars{color:var(--red2);font-size:0.8rem;letter-spacing:0.1em;margin-bottom:0.8rem;}
+.test-text{font-size:0.82rem;color:var(--gray);line-height:1.8;margin-bottom:1.2rem;}
+.test-author{display:flex;align-items:center;gap:0.8rem;}
+.author-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--red),var(--red2));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;}
+.author-name{font-size:0.8rem;font-weight:600;}
+.author-role{font-size:0.62rem;color:var(--dim);}
+
+/* ── CONTACT ── */
+#contact{background:radial-gradient(ellipse 60% 50% at 50% 50%,#1a0010 0%,var(--bg) 70%);}
+.contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:4rem;max-width:1000px;margin:0 auto;align-items:start;}
+.contact-info h2{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;margin-bottom:0.8rem;}
+.contact-info p{font-size:0.85rem;color:var(--gray);line-height:1.8;margin-bottom:2rem;}
+.contact-details{display:flex;flex-direction:column;gap:0.8rem;margin-bottom:2rem;}
+.contact-detail{display:flex;align-items:center;gap:0.8rem;font-size:0.82rem;color:var(--gray);}
+.contact-detail a{color:var(--gray);text-decoration:none;}
+.contact-detail a:hover{color:#fff;}
+.contact-socials{display:flex;gap:0.8rem;margin-bottom:1.5rem;}
+.contact-form{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:2rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group input,.form-group textarea{width:100%;padding:0.8rem 1rem;background:rgba(192,19,58,0.05);border:1px solid var(--border);border-radius:8px;color:#fff;font-family:inherit;font-size:0.82rem;outline:none;transition:border-color 0.3s;resize:none;}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.25);}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--red);}
+.form-group textarea{height:110px;}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:1.8rem 5%;display:flex;align-items:center;justify-content:space-between;background:var(--bg);position:relative;z-index:1;}
+.footer-logo{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:var(--red2);}
+.footer-copy{font-size:0.65rem;color:var(--dim);letter-spacing:0.1em;}
+
+/* ── 3D REVEAL ── */
+.reveal3d{opacity:0;transform:perspective(800px) rotateX(15deg) translateY(40px) scale(0.96);transition:opacity 0.7s ease,transform 0.7s cubic-bezier(.17,.67,.3,1);}
+.reveal3d.visible{opacity:1;transform:perspective(800px) rotateX(0deg) translateY(0) scale(1);}
+.d1{transition-delay:0.1s;}.d2{transition-delay:0.2s;}.d3{transition-delay:0.3s;}.d4{transition-delay:0.4s;}.d5{transition-delay:0.5s;}.d6{transition-delay:0.6s;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  #home{flex-direction:column;text-align:center;}
+  .hero-btns,.follow-row,.hero-meta{justify-content:center;}
+  .hero-avatar{width:220px;height:250px;}
+  .about-grid,.contact-wrap{grid-template-columns:1fr;}
+  .works-grid,.services-grid,.pricing-grid,.test-grid{grid-template-columns:1fr 1fr;}
+  section{padding:6rem 4% 4rem;}
+  .sticker-wrap{display:none;}
+}
+@media(max-width:600px){
+  nav{padding:0.4rem;gap:0.1rem;}
+  .nav-item{padding:0.4rem 0.7rem;font-size:0.65rem;}
+  .works-grid,.services-grid,.pricing-grid,.test-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- 2D ANIME STICKERS (exact manga flat style from your images) -->
+<div class="sticker-wrap">
+  <!-- Left stickers -->
+  <!-- Anime boy 1: glasses + suit flat (Image 1 style) -->
+  <div class="sticker s1">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <rect x="15" y="48" width="50" height="35" rx="4" fill="#0a0a12"/>
+      <rect x="28" y="47" width="24" height="33" rx="2" fill="#e8e8e8"/>
+      <polygon points="34,47 40,58 46,47" fill="#ddd"/>
+      <polygon points="15,55 34,47 30,70 12,62" fill="#070710"/>
+      <polygon points="65,55 46,47 50,70 68,62" fill="#070710"/>
+      <line x1="38" y1="50" x2="40" y2="62" stroke="#bbb" stroke-width="1.5"/>
+      <line x1="42" y1="50" x2="40" y2="62" stroke="#bbb" stroke-width="1.5"/>
+      <rect x="33" y="56" width="14" height="3" rx="1" fill="#1a1a2e"/>
+      <rect x="25" y="36" width="30" height="14" rx="7" fill="#f0e0cc"/>
+      <ellipse cx="40" cy="27" rx="22" ry="16" fill="#0a0a0a"/>
+      <path d="M18 32 Q22 18 40 16 Q58 18 62 32" fill="#0a0a0a"/>
+      <ellipse cx="40" cy="34" rx="20" ry="16" fill="#f0e0cc"/>
+      <path d="M18 38 Q16 48 18 54" stroke="#0a0a0a" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M62 38 Q64 48 62 54" stroke="#0a0a0a" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <ellipse cx="32" cy="34" rx="7" ry="5" fill="#fff"/>
+      <ellipse cx="48" cy="34" rx="7" ry="5" fill="#fff"/>
+      <circle cx="32" cy="35" r="4" fill="#0d0015"/>
+      <circle cx="48" cy="35" r="4" fill="#0d0015"/>
+      <circle cx="34" cy="33" r="1.2" fill="#fff"/>
+      <circle cx="50" cy="33" r="1.2" fill="#fff"/>
+      <rect x="24" y="30" width="16" height="10" rx="5" stroke="#111" stroke-width="1.8" fill="rgba(0,0,0,0.05)"/>
+      <rect x="40" y="30" width="16" height="10" rx="5" stroke="#111" stroke-width="1.8" fill="rgba(0,0,0,0.05)"/>
+      <line x1="40" y1="34" x2="40" y2="34" stroke="#111" stroke-width="1.8"/>
+      <path d="M30 27 Q40 24 50 27" stroke="#0a0a0a" stroke-width="2" fill="none"/>
+      <path d="M35 42 Q40 44 45 42" stroke="#a07850" stroke-width="1.2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Anime dark boy 2: looking down style (Image 2 style) -->
+  <div class="sticker s2">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="50" width="60" height="35" rx="4" fill="#050508"/>
+      <rect x="28" y="49" width="24" height="33" rx="2" fill="#e0e0e0"/>
+      <line x1="38" y1="51" x2="40" y2="64" stroke="#bbb" stroke-width="1.5"/>
+      <line x1="42" y1="51" x2="40" y2="64" stroke="#bbb" stroke-width="1.5"/>
+      <polygon points="10,58 28,49 24,72 8,65" fill="#030306"/>
+      <polygon points="70,58 52,49 56,72 72,65" fill="#030306"/>
+      <rect x="26" y="37" width="28" height="14" rx="6" fill="#f5f0ea"/>
+      <ellipse cx="40" cy="26" rx="24" ry="18" fill="#050508"/>
+      <path d="M16 35 Q20 18 40 15 Q60 18 64 35" fill="#050508"/>
+      <path d="M16 35 Q14 26 16 20" fill="#050508"/>
+      <path d="M64 35 Q66 26 64 20" fill="#050508"/>
+      <ellipse cx="40" cy="34" rx="22" ry="17" fill="#f5f0ea"/>
+      <path d="M16 42 Q13 52 16 58" stroke="#050508" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <path d="M64 42 Q67 52 64 58" stroke="#050508" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <circle cx="62" cy="48" r="2" fill="#c0133a"/>
+      <ellipse cx="31" cy="36" rx="8" ry="5" fill="#fff"/>
+      <ellipse cx="49" cy="36" rx="8" ry="5" fill="#fff"/>
+      <path d="M24 33 Q31 30 38 33" stroke="#050508" stroke-width="2.2" fill="none"/>
+      <path d="M42 33 Q49 30 56 33" stroke="#050508" stroke-width="2.2" fill="none"/>
+      <circle cx="31" cy="37" r="5" fill="#080010"/>
+      <circle cx="49" cy="37" r="5" fill="#080010"/>
+      <circle cx="33" cy="35" r="1.5" fill="#fff"/>
+      <circle cx="51" cy="35" r="1.5" fill="#fff"/>
+      <rect x="22" y="31" width="18" height="11" rx="5" stroke="#111" stroke-width="1.5" fill="rgba(0,0,0,0.06)"/>
+      <line x1="40" y1="36" x2="22" y2="36" stroke="#111" stroke-width="1.5"/>
+      <path d="M27 27 Q40 23 53 27" stroke="#050508" stroke-width="2.5" fill="none"/>
+      <path d="M33 46 Q40 48 47 46" stroke="#997755" stroke-width="1.2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Star/sparkle sticker -->
+  <div class="sticker s3">
+    <svg viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="35,5 42,26 65,26 47,40 54,61 35,48 16,61 23,40 5,26 28,26" fill="#c0133a" stroke="#ff4470" stroke-width="1.5"/>
+      <polygon points="35,14 40,28 55,28 43,37 48,51 35,43 22,51 27,37 15,28 30,28" fill="#ff2255"/>
+      <circle cx="35" cy="35" r="6" fill="#fff" opacity="0.9"/>
+    </svg>
+  </div>
+
+  <!-- Right stickers -->
+  <!-- Anime boy glasses profile -->
+  <div class="sticker s4">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <rect x="12" y="50" width="56" height="32" rx="4" fill="#0a0a12"/>
+      <rect x="28" y="49" width="24" height="32" rx="2" fill="#e8e8e8"/>
+      <polygon points="12,56 28,49 24,68 10,62" fill="#070710"/>
+      <polygon points="68,56 52,49 56,68 70,62" fill="#070710"/>
+      <polygon points="34,49 40,60 46,49" fill="#d8d8d8"/>
+      <rect x="33" y="55" width="14" height="3" rx="1" fill="#111"/>
+      <rect x="26" y="37" width="28" height="14" rx="6" fill="#f0dfc8"/>
+      <ellipse cx="40" cy="26" rx="22" ry="17" fill="#0d0d0d"/>
+      <path d="M18 34 Q22 16 40 14 Q58 16 62 34" fill="#0d0d0d"/>
+      <path d="M18 38 Q14 30 16 22" fill="#0d0d0d"/>
+      <path d="M62 38 Q66 30 64 22" fill="#0d0d0d"/>
+      <ellipse cx="40" cy="33" rx="20" ry="15" fill="#f0dfc8"/>
+      <path d="M18 40 Q15 50 18 56" stroke="#0d0d0d" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <path d="M62 40 Q65 50 62 56" stroke="#0d0d0d" stroke-width="4" stroke-linecap="round" fill="none"/>
+      <ellipse cx="32" cy="33" rx="7" ry="5" fill="#fff"/>
+      <ellipse cx="48" cy="33" rx="7" ry="5" fill="#fff"/>
+      <circle cx="32" cy="34" r="4" fill="#0f0018"/>
+      <circle cx="48" cy="34" r="4" fill="#0f0018"/>
+      <circle cx="34" cy="32" r="1.2" fill="#fff"/>
+      <circle cx="50" cy="32" r="1.2" fill="#fff"/>
+      <rect x="24" y="29" width="16" height="10" rx="5" stroke="#111" stroke-width="1.8" fill="rgba(0,0,0,0.06)"/>
+      <rect x="40" y="29" width="16" height="10" rx="5" stroke="#111" stroke-width="1.8" fill="rgba(0,0,0,0.06)"/>
+      <line x1="40" y1="33.5" x2="40" y2="33.5" stroke="#111" stroke-width="2"/>
+      <path d="M28 25 Q40 22 52 25" stroke="#0d0d0d" stroke-width="2" fill="none"/>
+      <path d="M33 42 Q40 45 47 42" stroke="#9a7855" stroke-width="1.2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Red glow circle sticker -->
+  <div class="sticker s5">
+    <svg viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="35" cy="35" r="30" fill="none" stroke="#c0133a" stroke-width="3"/>
+      <circle cx="35" cy="35" r="22" fill="none" stroke="#e01a46" stroke-width="2"/>
+      <circle cx="35" cy="35" r="12" fill="#c0133a" opacity="0.8"/>
+      <circle cx="35" cy="35" r="6" fill="#ff2255"/>
+      <line x1="35" y1="2" x2="35" y2="12" stroke="#c0133a" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="35" y1="58" x2="35" y2="68" stroke="#c0133a" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="2" y1="35" x2="12" y2="35" stroke="#c0133a" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="58" y1="35" x2="68" y2="35" stroke="#c0133a" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+
+  <!-- Dark anime boy looking down (s6) -->
+  <div class="sticker s6">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="52" width="64" height="30" rx="4" fill="#030306"/>
+      <rect x="27" y="51" width="26" height="30" rx="2" fill="#ddd"/>
+      <polygon points="8,60 27,51 22,72 6,66" fill="#020204"/>
+      <polygon points="72,60 53,51 58,72 74,66" fill="#020204"/>
+      <line x1="37" y1="53" x2="40" y2="65" stroke="#bbb" stroke-width="1.5"/>
+      <line x1="43" y1="53" x2="40" y2="65" stroke="#bbb" stroke-width="1.5"/>
+      <rect x="30" y="58" width="20" height="3" rx="1" fill="#111"/>
+      <rect x="25" y="38" width="30" height="15" rx="7" fill="#f5efe5"/>
+      <ellipse cx="40" cy="27" rx="25" ry="19" fill="#030306"/>
+      <path d="M15 36 Q18 15 40 13 Q62 15 65 36" fill="#030306"/>
+      <path d="M15 40 Q11 28 13 18" fill="#030306"/>
+      <path d="M65 40 Q69 28 67 18" fill="#030306"/>
+      <ellipse cx="40" cy="36" rx="22" ry="17" fill="#f5efe5"/>
+      <path d="M15 44 Q11 55 15 62" stroke="#030306" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M65 44 Q69 55 65 62" stroke="#030306" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <circle cx="63" cy="50" r="2.2" fill="#c0133a"/>
+      <ellipse cx="31" cy="37" rx="8" ry="5.5" fill="#fff"/>
+      <ellipse cx="49" cy="37" rx="8" ry="5.5" fill="#fff"/>
+      <path d="M23 34 Q31 30 39 34" stroke="#030306" stroke-width="2.5" fill="none"/>
+      <path d="M41 34 Q49 30 57 34" stroke="#030306" stroke-width="2.5" fill="none"/>
+      <circle cx="31" cy="38" r="5.5" fill="#05000f"/>
+      <circle cx="49" cy="38" r="5.5" fill="#05000f"/>
+      <circle cx="33" cy="36" r="1.5" fill="#fff"/>
+      <circle cx="51" cy="36" r="1.5" fill="#fff"/>
+      <rect x="22" y="31" width="18" height="12" rx="6" stroke="#111" stroke-width="1.8" fill="rgba(0,0,0,0.08)"/>
+      <line x1="40" y1="37" x2="22" y2="37" stroke="#111" stroke-width="1.5"/>
+      <path d="M27 27 Q40 22 53 27" stroke="#030306" stroke-width="2.8" fill="none"/>
+      <path d="M33 48 Q40 51 47 48" stroke="#907050" stroke-width="1.3" fill="none"/>
+    </svg>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-bg" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modalForm">
+      <span class="modal-plan-badge" id="modalBadge">STANDARD PLAN</span>
+      <h3 id="modalTitle">Order Plan</h3>
+      <p class="modal-sub">Fill your details — I'll receive it directly on WhatsApp and reply within 24 hrs! 🔥</p>
+      <div class="fg"><label>Your Name *</label><input id="oName" type="text" placeholder="e.g. Arjun Sharma"/></div>
+      <div class="fg"><label>Your Niche / Content Type *</label><input id="oNiche" type="text" placeholder="e.g. Gaming, Fashion, Motivation..."/></div>
+      <div class="fg"><label>Your WhatsApp Number *</label><input id="oPhone" type="tel" placeholder="+91 98765 43210"/></div>
+      <div class="fg"><label>Your Offering Budget</label><input id="oBudget" type="text" placeholder="e.g. ₹800 (negotiable)"/></div>
+      <div class="fg"><label>Project Details</label><textarea id="oDetails" placeholder="Video type, length, deadline, style, etc."></textarea></div>
+      <button class="modal-submit" onclick="submitOrder()">→ Send to Rajdeep on WhatsApp 💬</button>
+    </div>
+    <div class="modal-success" id="modalSuccess">
+      <div class="tick">✅</div>
+      <h4>Order Sent to Rajdeep!</h4>
+      <p>WhatsApp is opening now.<br/>Rajdeep will reply within 24 hours! 🔥</p>
+    </div>
+  </div>
+</div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-tags">
+    <span class="loader-tag active" id="lt1">● SYSTEM READY</span>
+    <span class="loader-tag" id="lt2">RAJDEEP PORTFOLIO</span>
+    <span class="loader-tag" id="lt3">UI LOADING</span>
+  </div>
+  <div class="loader-orb">WELCOME</div>
+  <div class="loader-bar"><div class="loader-fill" id="loaderFill"></div></div>
+  <div class="loader-text" id="loaderText">INITIALIZING... 0%</div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="nav-item active" href="#home" onclick="go(event,'home')"><span class="nav-dot"></span>Home</a>
+  <a class="nav-item" href="#about" onclick="go(event,'about')"><span class="nav-dot"></span>About</a>
+  <a class="nav-item" href="#works" onclick="go(event,'works')"><span class="nav-dot"></span>Works</a>
+  <a class="nav-item" href="#services" onclick="go(event,'services')"><span class="nav-dot"></span>Services</a>
+  <a class="nav-item" href="#testimonials" onclick="go(event,'testimonials')"><span class="nav-dot"></span>Reviews</a>
+  <a class="nav-item" href="#contact" onclick="go(event,'contact')"><span class="nav-dot"></span>Contact</a>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+  <div>
+    <div class="hero-badge reveal3d"><span class="badge-dot"></span> Available for freelance work</div>
+    <h1 class="hero-name reveal3d d1">Hi, I'm<br>Rajdeep</h1>
+    <p class="hero-role reveal3d d2">Video Editor · Motion Designer · Graphic Designer</p>
+    <p class="hero-desc reveal3d d3">I craft cinematic edits, smooth motion graphics, and eye-catching designs that stop scrollers and convert viewers — from short reels to long-form storytelling.</p>
+    <div class="hero-meta reveal3d d3">
+      <span>📍 Sribhumi, India</span>
+      <span>✅ Available Now</span>
+    </div>
+    <div class="hero-btns reveal3d d4">
+      <button class="btn-red" onclick="go(null,'works')">→ View My Work</button>
+      <button class="btn-outline" onclick="go(null,'contact')">↓ Hire Me</button>
+    </div>
+    <div class="follow-row reveal3d d5">
+      <span class="follow-label">Follow me:</span>
+      <a href="https://instagram.com/soulpixelll" target="_blank" class="social-icon-btn" title="Instagram">📸</a>
+      <a href="https://wa.me/918011211835" target="_blank" class="social-icon-btn" title="WhatsApp">💬</a>
+      <a href="mailto:workwithrajdeep09@gmail.com" class="social-icon-btn" title="Gmail">✉️</a>
+    </div>
+  </div>
+  <!-- ANIME AVATAR using inline SVG (exact 2D manga style) -->
+  <div class="hero-avatar reveal3d d2">
+    <svg class="hero-avatar-img" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+      <!-- Suit -->
+      <path d="M25 280 L25 195 Q35 175 65 170 L85 188 L100 183 L115 188 L135 170 Q165 175 175 195 L175 280Z" fill="#0a0a14"/>
+      <path d="M72 170 L100 205 L128 170 L118 170 L100 198 L82 170Z" fill="#e8e8e8"/>
+      <path d="M96 178 L104 178 L107 238 L100 246 L93 238Z" fill="#0a000a"/>
+      <path d="M97 176 L103 176 L104 184 L100 188 L96 184Z" fill="#c0133a"/>
+      <path d="M25 195 L72 170 L67 225 L22 208Z" fill="#06060e"/>
+      <path d="M175 195 L128 170 L133 225 L178 208Z" fill="#06060e"/>
+      <!-- Neck -->
+      <rect x="88" y="152" width="24" height="22" rx="4" fill="#ead5b8"/>
+      <!-- Head -->
+      <ellipse cx="100" cy="115" rx="54" ry="58" fill="#f0dfc8"/>
+      <!-- Hair -->
+      <ellipse cx="100" cy="68" rx="57" ry="30" fill="#0a0a0a"/>
+      <path d="M43 90 Q36 68 50 50 Q66 33 100 31 Q134 33 150 50 Q164 68 157 90" fill="#0a0a0a"/>
+      <path d="M43 88 Q32 76 34 58 Q40 46 47 55" fill="#0a0a0a"/>
+      <path d="M157 88 Q168 76 166 58 Q160 46 153 55" fill="#0a0a0a"/>
+      <path d="M56 62 Q53 44 65 36" stroke="#0a0a0a" stroke-width="9" stroke-linecap="round" fill="none"/>
+      <path d="M72 53 Q69 35 79 28" stroke="#0a0a0a" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M100 48 Q100 30 100 24" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M128 53 Q131 35 121 28" stroke="#0a0a0a" stroke-width="7" stroke-linecap="round" fill="none"/>
+      <path d="M144 62 Q147 44 135 36" stroke="#0a0a0a" stroke-width="8" stroke-linecap="round" fill="none"/>
+      <path d="M45 102 Q34 115 36 135 Q40 150 48 156" stroke="#0a0a0a" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <path d="M155 102 Q166 115 164 135 Q160 150 152 156" stroke="#0a0a0a" stroke-width="11" stroke-linecap="round" fill="none"/>
+      <!-- Ears -->
+      <ellipse cx="48" cy="115" rx="7" ry="9" fill="#e0ccb0"/>
+      <ellipse cx="152" cy="115" rx="7" ry="9" fill="#e0ccb0"/>
+      <!-- Earring -->
+      <circle cx="152" cy="122" r="2.5" fill="#c0133a"/>
+      <!-- Eyes -->
+      <ellipse cx="80" cy="112" rx="14" ry="10" fill="#fff"/>
+      <ellipse cx="120" cy="112" rx="14" ry="10" fill="#fff"/>
+      <!-- Iris -->
+      <ellipse cx="80" cy="114" rx="9" ry="8" fill="#10031c"/>
+      <ellipse cx="120" cy="114" rx="9" ry="8" fill="#10031c"/>
+      <!-- Pupil -->
+      <circle cx="80" cy="115" r="4" fill="#04000a"/>
+      <circle cx="120" cy="115" r="4" fill="#04000a"/>
+      <!-- Shine -->
+      <circle cx="84" cy="110" r="2.2" fill="#fff" opacity="0.95"/>
+      <circle cx="124" cy="110" r="2.2" fill="#fff" opacity="0.95"/>
+      <!-- Eyelids -->
+      <path d="M66 107 Q80 102 94 107" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <path d="M106 107 Q120 102 134 107" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <!-- Glasses (round, Image 1 style) -->
+      <circle cx="80" cy="113" r="15" stroke="#1a1a1a" stroke-width="2.8" fill="rgba(0,0,10,0.08)"/>
+      <circle cx="120" cy="113" r="15" stroke="#1a1a1a" stroke-width="2.8" fill="rgba(0,0,10,0.08)"/>
+      <line x1="95" y1="113" x2="105" y2="113" stroke="#1a1a1a" stroke-width="2.5"/>
+      <line x1="44" y1="110" x2="65" y2="112" stroke="#1a1a1a" stroke-width="2"/>
+      <line x1="135" y1="112" x2="156" y2="110" stroke="#1a1a1a" stroke-width="2"/>
+      <!-- Nose -->
+      <path d="M97 130 Q100 136 103 130" stroke="#c8a882" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <!-- Mouth neutral/serious -->
+      <path d="M87 148 Q100 152 113 148" stroke="#a07855" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <!-- Eyebrows -->
+      <path d="M64 102 Q80 96 93 100" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <path d="M107 100 Q120 96 136 102" stroke="#0a0a0a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+      <!-- Red glow bottom -->
+      <ellipse cx="100" cy="276" rx="55" ry="12" fill="rgba(192,19,58,0.12)"/>
+    </svg>
+    <div class="avatar-bottom-tag">
+      <div><div class="abt-name">Rajdeep</div><div class="abt-role">VIDEO EDITOR · DESIGNER</div></div>
+      <span style="font-size:1.1rem">🎬</span>
+    </div>
+    <div class="avatar-glow"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-photo reveal3d">
+      <!-- Image 2 style: dark, looking down, earring -->
+      <svg class="about-photo-img" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 280 L20 198 Q30 178 62 172 L82 190 L100 185 L118 190 L138 172 Q170 178 180 198 L180 280Z" fill="#04040a"/>
+        <path d="M72 172 L100 208 L128 172 L118 172 L100 202 L82 172Z" fill="#e0e0e0"/>
+        <path d="M96 178 L104 178 L108 240 L100 248 L92 240Z" fill="#080008"/>
+        <path d="M97 176 L103 176 L105 184 L100 188 L95 184Z" fill="#c0133a"/>
+        <path d="M20 198 L72 172 L66 228 L18 212Z" fill="#020208"/>
+        <path d="M180 198 L128 172 L134 228 L182 212Z" fill="#020208"/>
+        <rect x="87" y="154" width="26" height="24" rx="5" fill="#f0e5d0"/>
+        <ellipse cx="100" cy="118" rx="55" ry="58" fill="#f2e8d5"/>
+        <ellipse cx="100" cy="70" rx="58" ry="32" fill="#050508"/>
+        <path d="M42 95 Q34 70 48 50 Q64 32 100 30 Q136 32 152 50 Q166 70 158 95" fill="#050508"/>
+        <path d="M42 92 Q30 80 32 60 Q38 46 46 56" fill="#050508"/>
+        <path d="M158 92 Q170 80 168 60 Q162 46 154 56" fill="#050508"/>
+        <path d="M44 105 Q32 118 34 140 Q38 156 46 162" stroke="#050508" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <path d="M156 105 Q168 118 166 140 Q162 156 154 162" stroke="#050508" stroke-width="12" stroke-linecap="round" fill="none"/>
+        <ellipse cx="47" cy="118" rx="7" ry="9" fill="#e2cdb0"/>
+        <ellipse cx="153" cy="118" rx="7" ry="9" fill="#e2cdb0"/>
+        <circle cx="153" cy="126" r="3" fill="#c0133a"/>
+        <ellipse cx="79" cy="116" rx="14" ry="9" fill="#fff"/>
+        <ellipse cx="121" cy="116" rx="14" ry="9" fill="#fff"/>
+        <path d="M65 110 Q79 104 93 110" stroke="#050508" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M107 110 Q121 104 135 110" stroke="#050508" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <ellipse cx="79" cy="117" rx="9" ry="7.5" fill="#08000f"/>
+        <ellipse cx="121" cy="117" rx="9" ry="7.5" fill="#08000f"/>
+        <circle cx="79" cy="118" r="4" fill="#020008"/>
+        <circle cx="121" cy="118" r="4" fill="#020008"/>
+        <circle cx="83" cy="114" r="2" fill="#fff" opacity="0.9"/>
+        <circle cx="125" cy="114" r="2" fill="#fff" opacity="0.9"/>
+        <!-- Glasses half -->
+        <path d="M64 108 Q79 103 93 108" stroke="#1a1a1a" stroke-width="2.5" fill="none"/>
+        <rect x="64" y="108" width="30" height="17" rx="8" stroke="#111" stroke-width="2.2" fill="rgba(0,0,5,0.08)"/>
+        <line x1="94" y1="116" x2="107" y2="116" stroke="#111" stroke-width="2.2"/>
+        <line x1="44" y1="114" x2="64" y2="114" stroke="#111" stroke-width="2"/>
+        <path d="M97 133 Q100 138 103 133" stroke="#c8a882" stroke-width="1.8" fill="none"/>
+        <path d="M86 150 Q100 154 114 150" stroke="#907055" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <path d="M63 103 Q79 97 93 101" stroke="#050508" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <path d="M107 101 Q121 97 137 103" stroke="#050508" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="about-photo-tag">
+        <div><span>Status</span><br><strong>🟢 Online</strong></div>
+        <div><span>Location</span><br><strong>India 🇮🇳</strong></div>
+      </div>
+    </div>
+    <div>
+      <p class="section-eyebrow reveal3d">About Me</p>
+      <h2 class="section-title reveal3d d1">Passionate Creator<br>by <em>Nature</em></h2>
+      <p class="about-desc reveal3d d2">I'm Rajdeep — a video editor, motion designer, and graphic designer based in Sribhumi, India. I'm also a science student who discovered a deep passion for visual storytelling. I believe every frame tells a story, and I make sure that story hits hard.</p>
+      <p class="about-desc reveal3d d2">From viral short-form reels to cinematic long-form edits, I bring energy, precision, and creativity to every project. My toolkit is simple but powerful — Alight Motion, CapCut, and DaVinci Resolve.</p>
+      <div class="skills-grid reveal3d d3">
+        <span class="skill-tag">Alight Motion</span><span class="skill-tag">CapCut</span><span class="skill-tag">DaVinci Resolve</span>
+        <span class="skill-tag">Motion Graphics</span><span class="skill-tag">Color Grading</span><span class="skill-tag">Storytelling</span>
+        <span class="skill-tag">Poster Design</span><span class="skill-tag">Thumbnail Design</span><span class="skill-tag">Social Media</span>
+      </div>
+      <div class="exp-row reveal3d d4">
+        <div class="exp-item"><strong>3 Yrs</strong><span>Video Editing</span></div>
+        <div class="exp-item"><strong>2 Yrs</strong><span>Motion Design</span></div>
+        <div class="exp-item"><strong>1.5 Yrs</strong><span>Graphic Design</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <div class="works-header">
+    <p class="section-eyebrow reveal3d">My Portfolio</p>
+    <h2 class="section-title reveal3d d1">Featured <em>Work</em></h2>
+    <p style="color:var(--gray);font-size:0.85rem;max-width:500px;margin:0 auto;" class="reveal3d d2">Video editing projects — more coming soon! 🔥</p>
+  </div>
+  <div class="works-grid">
+    <div class="work-card reveal3d d1">
+      <div class="work-thumb" style="background:linear-gradient(135deg,#1a000d,#2a0020);">
+        <div class="work-thumb-overlay"></div><div class="play-icon">▶</div>
+      </div>
+      <div class="work-info">
+        <p class="work-cat">Video Editing · #1</p>
+        <h3 class="work-name">Introduction to My Work</h3>
+        <p class="work-desc">Bold showreel — smooth motion graphics, clean cuts, cinematic colour grading.</p>
+        <div class="work-tags"><span class="work-tag">Showreel</span><span class="work-tag">Motion Graphics</span></div>
+        <a class="work-link" href="https://drive.google.com/file/d/1ZiyCitgj12VKE0V0flO__zWnBB0_SJNP/view?usp=drivesdk" target="_blank">▶ Watch Video</a>
+      </div>
+    </div>
+    <div class="work-card reveal3d d2">
+      <div class="work-thumb" style="background:linear-gradient(135deg,#0d0a1a,#1a1030);">
+        <div class="work-thumb-overlay"></div><div class="play-icon">▶</div>
+      </div>
+      <div class="work-info">
+        <p class="work-cat">Video Editing · #2</p>
+        <h3 class="work-name">Introduction of Me</h3>
+        <p class="work-desc">Personal intro with smooth transitions, expressive text animations, engaging visual flow.</p>
+        <div class="work-tags"><span class="work-tag">Personal Branding</span><span class="work-tag">Alight Motion</span></div>
+        <a class="work-link" href="https://drive.google.com/file/d/1VnjKV6ReoeOUxM6A2Rj9D0Vfjr41qZjS/view?usp=drivesdk" target="_blank">▶ Watch Video</a>
+      </div>
+    </div>
+    <div class="work-card reveal3d d3">
+      <div class="work-thumb" style="background:linear-gradient(135deg,#1a0d00,#2a1800);">
+        <div class="work-thumb-overlay"></div><div class="play-icon">▶</div>
+      </div>
+      <div class="work-info">
+        <p class="work-cat">Video Editing · #4</p>
+        <h3 class="work-name">Whop — Platform Ad</h3>
+        <p class="work-desc">Dynamic ad — sharp motion graphics, punchy text reveals, high-energy pacing.</p>
+        <div class="work-tags"><span class="work-tag">Advertisement</span><span class="work-tag">Motion Graphics</span></div>
+        <a class="work-link" href="https://drive.google.com/file/d/1wQHrot5tv2O0pYK0-ZiQhTwHDFsuHWP5/view?usp=drivesdk" target="_blank">▶ Watch Video</a>
+      </div>
+    </div>
+    <div class="work-card reveal3d d1">
+      <div class="work-thumb" style="background:linear-gradient(135deg,#1a001a,#2a0030);">
+        <div class="work-thumb-overlay"></div><div class="play-icon">▶</div>
+      </div>
+      <div class="work-info">
+        <p class="work-cat">Video Editing · #5</p>
+        <h3 class="work-name">Ordering the iPhone</h3>
+        <p class="work-desc">Sleek iPhone ordering video — clean cuts, satisfying transitions, premium treatment.</p>
+        <div class="work-tags"><span class="work-tag">Tech Content</span><span class="work-tag">Clean Edit</span></div>
+        <a class="work-link" href="https://drive.google.com/file/d/13VMQom4vltGIuITWLxDchYMhl1_CLEC9/view?usp=drivesdk" target="_blank">▶ Watch Video</a>
+      </div>
+    </div>
+    <div class="work-card reveal3d d2" style="opacity:0.45;">
+      <div class="work-thumb" style="background:linear-gradient(135deg,#0a0005,#1a000d);font-size:2rem;">
+        <div class="work-thumb-overlay"></div>🕐
+      </div>
+      <div class="work-info">
+        <p class="work-cat">Video Editing · #3</p>
+        <h3 class="work-name">Coming Soon...</h3>
+        <p class="work-desc">More projects dropping soon. Stay tuned! 🔥</p>
+        <div class="work-tags"><span class="work-tag">In Progress</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES + PRICING -->
+<section id="services">
+  <div class="services-header">
+    <p class="section-eyebrow reveal3d">What I Offer</p>
+    <h2 class="section-title reveal3d d1">Our Features <em>&amp; Services</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal3d d1">
+      <div class="service-icon">🎬</div>
+      <h3 class="service-name">Video Editing</h3>
+      <p class="service-desc">From cinematic long-form to viral short-form — motion graphics, storytelling, high pacing, and ad cuts that convert.</p>
+      <div class="service-features"><span class="sf">Motion Graphics</span><span class="sf">Storytelling</span><span class="sf">Long Form</span><span class="sf">Short Form</span><span class="sf">High Pacing</span><span class="sf">Ad Cuts</span></div>
+    </div>
+    <div class="service-card reveal3d d2">
+      <div class="service-icon">🎨</div>
+      <h3 class="service-name">Graphic Design</h3>
+      <p class="service-desc">Bold posters, high-CTR thumbnails, and ad creatives that stop the scroll and make your brand unforgettable.</p>
+      <div class="service-features"><span class="sf">Posters</span><span class="sf">Ad Creatives</span><span class="sf">Thumbnails</span></div>
+    </div>
+    <div class="service-card reveal3d d3">
+      <div class="service-icon">📱</div>
+      <h3 class="service-name">Social Media Management</h3>
+      <p class="service-desc">Full page management — content planning, reel creation, story design, and engagement strategy for real growth.</p>
+      <div class="service-features"><span class="sf">Content Calendar</span><span class="sf">Reel Strategy</span><span class="sf">Growth Focused</span></div>
+    </div>
+  </div>
+  <div class="pricing-title">
+    <p class="section-eyebrow reveal3d">Pricing Plans</p>
+    <h2 class="section-title reveal3d d1">Choose Your <em>Package</em></h2>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card reveal3d d1">
+      <p class="price-tier">Basic</p>
+      <p class="price-amount">₹500</p>
+      <p class="price-note">Negotiable</p>
+      <ul class="price-features">
+        <li>Clean Pacing</li><li>Basic Transitions</li><li>Standard Delivery</li><li>1 Revision</li>
+      </ul>
+      <button class="btn-outline" style="display:block;width:100%;text-align:center;border-radius:8px;" onclick="openModal('Basic','₹500')">Get Started</button>
+    </div>
+    <div class="price-card featured reveal3d d2">
+      <p class="price-tier">Standard</p>
+      <p class="price-amount">₹800–1000</p>
+      <p class="price-note">Negotiable</p>
+      <ul class="price-features">
+        <li>Smooth Motion Graphics</li><li>Smooth Pacing</li><li>Fast Delivery</li><li>2 Revisions</li>
+      </ul>
+      <button class="btn-red" style="display:block;width:100%;text-align:center;border-radius:8px;" onclick="openModal('Standard','₹800–1000')">Get Started</button>
+    </div>
+    <div class="price-card reveal3d d3">
+      <p class="price-tier">Premium</p>
+      <p class="price-amount">₹1200–2500</p>
+      <p class="price-note">Negotiable</p>
+      <ul class="price-features">
+        <li>UI/UX Motions</li><li>Clean Pacing</li><li>Smooth Storytelling</li><li>Super Fast Delivery</li><li>Unlimited Revisions</li>
+      </ul>
+      <button class="btn-outline" style="display:block;width:100%;text-align:center;border-radius:8px;" onclick="openModal('Premium','₹1200–2500')">Get Started</button>
+    </div>
+  </div>
+  <div class="payment-note reveal3d">
+    <p>Payment via UPI</p>
+    <div class="upi-badge">💳 UPI: 8011211835@fam</div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div style="text-align:center;margin-bottom:4rem;">
+    <p class="section-eyebrow reveal3d">Client Reviews</p>
+    <h2 class="section-title reveal3d d1">What People <em>Say</em></h2>
+    <p style="color:var(--gray);font-size:0.82rem;" class="reveal3d d2">Overall Rating: ⭐ 4.8 / 5</p>
+  </div>
+  <div class="test-grid">
+    <div class="test-card reveal3d d1"><div class="stars">★★★★★</div><p class="test-text">"Rajdeep ne mera reel bilkul amazing bana diya! Transitions itne smooth the ki main khud dekhta reh gaya. Highly recommend karta hoon sabko."</p><div class="test-author"><div class="author-av">AK</div><div><div class="author-name">Arjun Kapoor</div><div class="author-role">Content Creator, Mumbai</div></div></div></div>
+    <div class="test-card reveal3d d2"><div class="stars">★★★★☆</div><p class="test-text">"Thumbnail design bahut clean tha aur click-through rate bhi badh gaya. Ek baar revision maanga tha jo turant ho gaya. Kaam se satisfied hoon."</p><div class="test-author"><div class="author-av">PS</div><div><div class="author-name">Priya Sharma</div><div class="author-role">YouTuber, Delhi</div></div></div></div>
+    <div class="test-card reveal3d d3"><div class="stars">★★★★★</div><p class="test-text">"Brand ka promotional video exactly wahi tha jo main chahta tha — cinematic look, smooth motion aur fast delivery. Definitely dobara karunga."</p><div class="test-author"><div class="author-av">RD</div><div><div class="author-name">Rohit Das</div><div class="author-role">Small Business Owner, Kolkata</div></div></div></div>
+    <div class="test-card reveal3d d1"><div class="stars">★★★★★</div><p class="test-text">"Social media management mein kamaal ka kaam kiya! 2 mahine mein followers triple ho gaye aur engagement bhi bahut badh gayi. Bohot khush hoon."</p><div class="test-author"><div class="author-av">NM</div><div><div class="author-name">Neha Mehta</div><div class="author-role">Fashion Brand Owner, Pune</div></div></div></div>
+    <div class="test-card reveal3d d2"><div class="stars">★★★★☆</div><p class="test-text">"Event poster design itna professional tha ki log soch rahe the kisi bade studio ne banaya hai. Pricing bhi reasonable hai. Acha kaam bhai!"</p><div class="test-author"><div class="author-av">SK</div><div><div class="author-name">Suresh Kumar</div><div class="author-role">Event Organiser, Chennai</div></div></div></div>
+    <div class="test-card reveal3d d3"><div class="stars">★★★★★</div><p class="test-text">"Music video edit ke liye aaya tha — beat sync, colour grading, glitch effects sab perfect tha. Time pe deliver kiya. Main toh fan ho gaya yaar!"</p><div class="test-author"><div class="author-av">AM</div><div><div class="author-name">Ankit Mishra</div><div class="author-role">Independent Artist, Lucknow</div></div></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <p class="section-eyebrow reveal3d">Get In Touch</p>
+      <h2 class="reveal3d d1">Let's collaborate!<br><em style="font-style:normal;color:var(--red2);">Start a project</em></h2>
+      <p class="reveal3d d2">I'm always open to new projects, creative ideas, and exciting opportunities. Reach out and let's create something amazing together.</p>
+      <div class="contact-details reveal3d d3">
+        <div class="contact-detail"><span>✉️</span><a href="mailto:workwithrajdeep09@gmail.com">workwithrajdeep09@gmail.com</a></div>
+        <div class="contact-detail"><span>📞</span><a href="https://wa.me/918011211835" target="_blank">+91 8011211835 (WhatsApp)</a></div>
+        <div class="contact-detail"><span>💳</span><span>UPI: 8011211835@fam</span></div>
+        <div class="contact-detail"><span>📍</span><span>Sribhumi, India</span></div>
+      </div>
+      <div class="contact-socials reveal3d d4">
+        <a href="https://instagram.com/soulpixelll" target="_blank" class="social-icon-btn" title="Instagram">📸</a>
+        <a href="https://wa.me/918011211835" target="_blank" class="social-icon-btn" title="WhatsApp">💬</a>
+        <a href="mailto:workwithrajdeep09@gmail.com" class="social-icon-btn" title="Gmail">✉️</a>
+      </div>
+      <button class="btn-outline reveal3d d5" onclick="go(null,'about')" style="margin-top:1rem;font-size:0.75rem;padding:0.55rem 1.2rem;">↑ About Me</button>
+    </div>
+    <div class="contact-form reveal3d d2">
+      <div class="form-group"><input type="text" id="cName" placeholder="Your Name"/></div>
+      <div class="form-group"><input type="email" id="cEmail" placeholder="Your Email"/></div>
+      <div class="form-group"><input type="text" id="cPhone" placeholder="Your WhatsApp / Phone (optional)"/></div>
+      <div class="form-group"><textarea id="cMsg" placeholder="Your Message — tell me about your project!"></textarea></div>
+      <button class="btn-red" style="width:100%;justify-content:center;" onclick="sendMsg(this)">→ Send Message</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">RAJDEEP ✦</div>
+  <div class="footer-copy">© 2026 Rajdeep. All rights reserved.</div>
+</footer>
+
+<script>
+/* ── LOADER ── */
+(function(){
+  const fill=document.getElementById('loaderFill'),txt=document.getElementById('loaderText');
+  const lt2=document.getElementById('lt2'),lt3=document.getElementById('lt3');
+  let p=0;
+  const iv=setInterval(()=>{
+    p+=Math.random()*4+1;if(p>100)p=100;
+    fill.style.width=p+'%';txt.textContent='LOADING... '+Math.floor(p)+'%';
+    if(p>40)lt2.classList.add('active');
+    if(p>75)lt3.classList.add('active');
+    if(p>=100){clearInterval(iv);txt.textContent='SYSTEM READY — WELCOME TO RAJDEEP';setTimeout(()=>{document.getElementById('loader').classList.add('hidden');},600);}
+  },60);
+})();
+
+/* ── SMOOTH SCROLL + NAV ACTIVE ── */
+function go(e,id){
+  if(e)e.preventDefault();
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-item').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+id));
+}
+
+/* ── SCROLL SPY ── */
+window.addEventListener('scroll',()=>{
+  const s=['home','about','works','services','testimonials','contact'];let c='home';
+  s.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-120)c=id;});
+  document.querySelectorAll('.nav-item').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));
+});
+
+/* ── 3D REVEAL ── */
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.1});
+document.querySelectorAll('.reveal3d').forEach(el=>obs.observe(el));
+
+/* ── CARD TILT ── */
+document.querySelectorAll('.work-card,.service-card,.price-card,.test-card').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-0.5,y=(e.clientY-r.top)/r.height-0.5;
+    card.style.transform=`perspective(800px) translateY(-10px) rotateX(${-y*12}deg) rotateY(${x*12}deg) scale(1.03)`;
+  });
+  card.addEventListener('mouseleave',()=>card.style.transform='');
+  card.addEventListener('mousedown',()=>{card.style.transform='perspective(800px) scale(1.06)';card.style.boxShadow='0 0 70px rgba(255,34,85,0.5)';});
+  card.addEventListener('mouseup',()=>{card.style.transform='';card.style.boxShadow='';});
+});
+
+/* ── BUTTON GLOW ── */
+document.querySelectorAll('.btn-red,.btn-outline').forEach(btn=>{
+  btn.addEventListener('mousedown',()=>{btn.style.transform='scale(0.96)';btn.style.boxShadow='0 0 50px rgba(255,34,85,0.7)';});
+  btn.addEventListener('mouseup',()=>{btn.style.transform='';btn.style.boxShadow='';});
+  btn.addEventListener('mouseleave',()=>{btn.style.transform='';btn.style.boxShadow='';});
+});
+
+/* ── ORDER MODAL ── */
+let curPlan='',curPrice='';
+function openModal(plan,price){
+  curPlan=plan;curPrice=price;
+  document.getElementById('modalBadge').textContent=plan.toUpperCase()+' PLAN';
+  document.getElementById('modalTitle').textContent='Order '+plan+' — '+price;
+  document.getElementById('oBudget').value=price;
+  document.getElementById('oName').value='';
+  document.getElementById('oNiche').value='';
+  document.getElementById('oPhone').value='';
+  document.getElementById('oDetails').value='';
+  document.getElementById('modalForm').style.display='block';
+  document.getElementById('modalSuccess').style.display='none';
+  document.getElementById('orderModal').classList.add('open');
+}
+function closeModal(){document.getElementById('orderModal').classList.remove('open');}
+document.getElementById('orderModal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+function submitOrder(){
+  const name=document.getElementById('oName').value.trim();
+  const niche=document.getElementById('oNiche').value.trim();
+  const phone=document.getElementById('oPhone').value.trim();
+  const budget=document.getElementById('oBudget').value.trim();
+  const details=document.getElementById('oDetails').value.trim();
+  if(!name){alert('Please enter your name!');return;}
+  if(!niche){alert('Please enter your niche/content type!');return;}
+  if(!phone){alert('Please enter your WhatsApp number!');return;}
+
+  const msg=`🎬 *NEW ORDER — ${curPlan.toUpperCase()} PLAN*\n\n👤 *Name:* ${name}\n📱 *Client WhatsApp:* ${phone}\n🎯 *Niche:* ${niche}\n💰 *Budget:* ${budget||curPrice}\n📋 *Details:* ${details||'Not specified'}\n\n✅ _Sent from Rajdeep's Portfolio Website_`;
+
+  window.open(`https://wa.me/918011211835?text=${encodeURIComponent(msg)}`,'_blank');
+  document.getElementById('modalForm').style.display='none';
+  document.getElementById('modalSuccess').style.display='block';
+  setTimeout(closeModal,4000);
+}
+
+/* ── CONTACT FORM → WhatsApp + Email ── */
+function sendMsg(btn){
+  const name=document.getElementById('cName').value.trim();
+  const email=document.getElementById('cEmail').value.trim();
+  const phone=document.getElementById('cPhone').value.trim();
+  const msg=document.getElementById('cMsg').value.trim();
+  if(!name||!msg){alert('Please enter your name and message!');return;}
+
+  const wa=`💬 *CONTACT MESSAGE*\n\n👤 *Name:* ${name}\n📧 *Email:* ${email||'Not provided'}\n📱 *Phone:* ${phone||'Not provided'}\n\n💬 *Message:*\n${msg}\n\n✅ _Sent from Rajdeep's Portfolio_`;
+  window.open(`https://wa.me/918011211835?text=${encodeURIComponent(wa)}`,'_blank');
+
+  const body=`Name: ${name}\nEmail: ${email||'Not provided'}\nPhone: ${phone||'Not provided'}\n\nMessage:\n${msg}`;
+  window.open(`mailto:workwithrajdeep09@gmail.com?subject=New Message from ${name} — Portfolio&body=${encodeURIComponent(body)}`);
+
+  btn.innerHTML='✓ Sent!';btn.style.background='#1a8040';
+  setTimeout(()=>{
+    btn.innerHTML='→ Send Message';btn.style.background='';
+    document.getElementById('cName').value='';document.getElementById('cEmail').value='';
+    document.getElementById('cPhone').value='';document.getElementById('cMsg').value='';
+  },3500);
+}
+</script>
+</body>
+</html>
